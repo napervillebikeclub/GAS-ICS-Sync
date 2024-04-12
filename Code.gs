@@ -25,7 +25,7 @@ var sourceCalendars = [                // The ics/ical urls that you want to get
                                        // For instance: ["https://p24-calendars.icloud.com/holidays/us_en.ics", "US Holidays"]
                                        // Or with colors following mapping https://developers.google.com/apps-script/reference/calendar/event-color,
                                        // for instance: ["https://p24-calendars.icloud.com/holidays/us_en.ics", "US Holidays", "11"]
-  ["https://strautomator.com/api/calendar/109863990/806208a5637e327bfdfc0757/all.ics?countries=1", "From Strava"]
+  ["https://strautomator.com/api/calendar/109863990/806208a5637e327bfdfc0757/clubs.ics?countries=1&link=1", "From Strava"]
 
 ];
 
