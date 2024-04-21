@@ -135,7 +135,7 @@ var startUpdateTime;
 var calendarEvents = [];
 var calendarEventsIds = [];
 var icsEventsIds = [];
-var calendarEventsMD5s = [];
+var calendarEventsHashes = [];
 var recurringEvents = [];
 var targetCalendarId;
 var targetCalendarName;
@@ -165,7 +165,7 @@ function startSync(){
     calendarEvents = [];
     calendarEventsIds = [];
     icsEventsIds = [];
-    calendarEventsMD5s = [];
+    calendarEventsHashes = [];
     recurringEvents = [];
 
     targetCalendarName = calendar[0];
@@ -201,7 +201,7 @@ function startSync(){
       for (var i = 0; i < calendarEvents.length; i++){
         if (calendarEvents[i].extendedProperties != null){
           calendarEventsIds[i] = calendarEvents[i].extendedProperties.private["rec-id"] || calendarEvents[i].extendedProperties.private["id"];
-          calendarEventsMD5s[i] = calendarEvents[i].extendedProperties.private["MD5"];
+          calendarEventsHashes[i] = calendarEvents[i].extendedProperties.private["HASH"];
         }
       }
 
