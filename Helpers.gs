@@ -151,8 +151,7 @@ function fetchSourceCalendars(sourceCalendarURLs){
           }          
           urlContent = icsRegex.exec(icsContent)
           if (urlContent == null){
-            Logger.log("[ERROR] Incorrect ics/ical URL: " + url)
-            return
+            throw "Error: Incorrect ics/ical URL or corrupted data received: " + url; 
           }
           Logger.log("[WARNING] Microsoft is incorrectly formatting ics/ical at: " + url)
         }
@@ -1057,7 +1056,8 @@ function sendSummary() {
 var backoffRecoverableErrors = [
   "service invoked too many times in a short time",
   "rate limit exceeded",
-  "internal error"];
+  "internal error",
+  "corrupted data received"];
 function callWithBackoff(func, maxRetries) {
   var tries = 0;
   var result;
