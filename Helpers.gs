@@ -461,7 +461,7 @@ function createEvent(event, calendarTz){
   }
 
   if (event.hasProperty('description'))
-    newEvent.description = icalEvent.description;
+    newEvent.description = linkifyHtml(icalEvent.description, { defaultProtocol: 'https' });
 
   if (event.hasProperty('location'))
     newEvent.location = icalEvent.location;
