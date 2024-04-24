@@ -138,6 +138,10 @@ var recurringEvents = [];
 var targetCalendarId;
 var targetCalendarName;
 
+function clearState(){
+  PropertiesService.getUserProperties().setProperty('LastRun', 0);
+}
+
 // Per-session global variables (must NOT be reset before processing each new calendar!)
 var addedEvents = [];
 var modifiedEvents = [];
@@ -171,7 +175,12 @@ function startSync(){
     var vevents;
 
     //------------------------ Fetch URL items ------------------------
+    try{
     var responses = fetchSourceCalendars(sourceCalendarURLs);
+    }catch(e){
+      Logger.log("Failure to fetch source calendar.  Aborting run");
+      return;
+    }
     Logger.log("Syncing " + responses.length + " calendars to " + targetCalendarName);
 
     //------------------------ Get target calendar information------------------------

@@ -113,6 +113,7 @@ function condenseCalendarMap(calendarMap){
  * Removes all triggers for the script's 'startSync' and 'install' function.
  */
 function deleteAllTriggers(){
+
   var triggers = ScriptApp.getProjectTriggers();
   for (var i = 0; i < triggers.length; i++){
     if (["startSync","install","main","checkForUpdate"].includes(triggers[i].getHandlerFunction())){
@@ -1108,6 +1109,7 @@ function callWithBackoff(func, maxRetries) {
       } else if ( err.includes("is not a function")  || !backoffRecoverableErrors.some(function(e){
               return err.toLowerCase().includes(e);
             }) ) {
+        Logger.log(err);
         throw err;
       } else if ( tries > maxRetries) {
         Logger.log(`Error, giving up after trying ${maxRetries} times [${err}]`);
