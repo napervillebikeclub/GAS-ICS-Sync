@@ -177,6 +177,7 @@ function startSync(){
     try{
       var responses = fetchSourceCalendars(sourceCalendarURLs);
     }catch(e){
+      PropertiesService.getUserProperties().setProperty('LastRun', 0);
       throw new Error("Failure to fetch source calendar.  Aborting run");
     }
     Logger.log("Syncing " + responses.length + " calendars to " + targetCalendarName);
