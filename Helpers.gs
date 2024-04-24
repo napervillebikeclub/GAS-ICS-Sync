@@ -1108,6 +1108,7 @@ function callWithBackoff(func, maxRetries) {
       } else if ( err.includes("is not a function")  || !backoffRecoverableErrors.some(function(e){
               return err.toLowerCase().includes(e);
             }) ) {
+        Logger.log(err);
         throw err;
       } else if ( tries > maxRetries) {
         Logger.log(`Error, giving up after trying ${maxRetries} times [${err}]`);
