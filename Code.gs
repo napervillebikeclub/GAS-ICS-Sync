@@ -45,9 +45,9 @@ var defaultAllDayReminder = -1;           // Default reminder for all day events
 var overrideVisibility = "";              // Changes the visibility of the event ("default", "public", "private", "confidential"). Anything else will revert to the class value of the ICAL event.
 var addTasks = false;
 
-var emailSummary = false;                 // Will email you when an event is added/modified/removed to your calendar
-var email = "";                           // OPTIONAL: If "emailSummary" is set to true or you want to receive update notifications, you will need to provide your email address
-var customEmailSubject = "";              // OPTIONAL: If you want to change the email subject, provide a custom one here. Default: "GAS-ICS-Sync Execution Summary"
+var emailSummary = true;                  // Will email you when an event is added/modified/removed to your calendar
+var email = "napervillebikeclub+webmaster@gmail.com"; // OPTIONAL: If "emailSummary" is set to true or you want to receive update notifications, you will need to provide your email address
+var customEmailSubject = "Testing NBC ICS Sync";      // OPTIONAL: If you want to change the email subject, provide a custom one here. Default: "GAS-ICS-Sync Execution Summary"
 var dateFormat = "YYYY-MM-DD"             // date format in the email summary (e.g. "YYYY-MM-DD", "DD.MM.YYYY", "MM/DD/YYYY". separators are ".", "-" and "/")
 
 /*
@@ -114,7 +114,6 @@ function install() {
       .everyMinutes(adjustedMinutes)
       .create();
   }
-  ScriptApp.newTrigger("startSync").timeBased().after(1000).create();
 
   // Schedule sync routine to look for update once per day using everyDays
   ScriptApp.newTrigger("checkForUpdate")
@@ -176,7 +175,7 @@ function startSync(){
 
     //------------------------ Fetch URL items ------------------------
     try{
-    var responses = fetchSourceCalendars(sourceCalendarURLs);
+      var responses = fetchSourceCalendars(sourceCalendarURLs);
     }catch(e){
       Logger.log("Failure to fetch source calendar.  Aborting run");
       return;
