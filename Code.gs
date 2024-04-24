@@ -29,7 +29,7 @@ var sourceCalendars = [                // The ics/ical urls that you want to get
   
 ];
 
-var howFrequent = 30;                  // What interval (minutes) to run this script on to check for new events
+var howFrequent = 15;                     // What interval (minutes) to run this script on to check for new events.  Any integer can be used, but will be rounded up to 5, 10, 15, 30 or to the nearest hour after that.. 60, 120, etc. 1440 (24 hours) is the maximum value.  Anything above that will be replaced with 1440.
 var onlyFutureEvents = true;          // If you turn this to "true", past events will not be synced (this will also removed past events from the target calendar if removeEventsFromCalendar is true)
 var addEventsToCalendar = true;        // If you turn this to "false", you can check the log (View > Logs) to make sure your events are being read correctly before turning this on
 var modifyExistingEvents = true;       // If you turn this to "false", any event in the feed that was modified after being added to the calendar will not update
@@ -177,8 +177,7 @@ function startSync(){
     try{
       var responses = fetchSourceCalendars(sourceCalendarURLs);
     }catch(e){
-      Logger.log("Failure to fetch source calendar.  Aborting run");
-      return;
+      throw new Error("Failure to fetch source calendar.  Aborting run");
     }
     Logger.log("Syncing " + responses.length + " calendars to " + targetCalendarName);
 
