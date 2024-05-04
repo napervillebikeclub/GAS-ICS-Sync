@@ -1008,6 +1008,29 @@ function parseNotificationTime(notificationString){
   }
 }
 
+function generateDiffHtml(oldStr, newStr) {
+  var diff = Diff.diffChars(oldStr, newStr,{ignoreCase: true});
+  var result = '';
+
+  diff.forEach(function(part){
+    // green for additions, red for deletions
+    // grey for common parts
+    var color = part.added ? 'green' :
+                part.removed ? 'red' : 'grey';
+    result += '<span style="color:' + color + '">' + part.value + '</span>';
+  });
+
+  return result;
+}
+function testdiff() {
+  const oldText = 'hello world';
+  const newText = 'Hello everyone';
+
+  const differences = generateDiffHtml(oldText, newText);
+
+console.log(differences);
+}
+
 /**
 * Sends an email summary with added/modified/deleted events.
 */
@@ -1039,16 +1062,11 @@ function sendSummary() {
     body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} modified events<br/><ul>`;
     for (var modifiedEvent of tgtCal[1]){
       body += "<li>"
-        + (modifiedEvent[0][0] != modifiedEvent[0][1] ? ("<del>Name: " + modifiedEvent[0][0] + "</del><br/>") : "")
-        + "Name: " + modifiedEvent[0][1] + "<br/>"
-        + (modifiedEvent[0][2] != modifiedEvent[0][3] ? ("<del>Start: " + formatDate(modifiedEvent[0][2]) + "</del><br/>") : "")
-        + " Start: " + formatDate(modifiedEvent[0][3]) + "<br/>"
-        + (modifiedEvent[0][4] != modifiedEvent[0][5] ? ("<del>End: " + formatDate(modifiedEvent[0][4]) + "</del><br/>") : "")
-        + " End: " + formatDate(modifiedEvent[0][5]) + "<br/>"
-        + (modifiedEvent[0][6] != modifiedEvent[0][7] ? ("<del>Location: " + (modifiedEvent[0][6] ? modifiedEvent[0][6] : "") + "</del><br/>") : "")
-        + (modifiedEvent[0][7] ? (" Location: " + modifiedEvent[0][7] + "<br/>") : "")
-        + (modifiedEvent[0][8] != modifiedEvent[0][9] ? ("<del>Description: " + (modifiedEvent[0][8] ? modifiedEvent[0][8] : "") + "</del><br/>") : "")
-        + (modifiedEvent[0][9] ? (" Description: " + modifiedEvent[0][9] + "<br/>") : "")
+        + (modifiedEvent[0][0] != modifiedEvent[0][1] ? ("Name: " + generateDiffHtml(modifiedEvent[0][0], modifiedEvent[0][1]) + "<br/><br/>"))
+        + (modifiedEvent[0][2] != modifiedEvent[0][3] ? ("Start: " + generateDiffHtml(formatDate(modifiedEvent[0][2]), formatDate(modifiedEvent[0][3])) + "<br/><br/>"))
+        + (modifiedEvent[0][4] != modifiedEvent[0][5] ? ("End: " + generateDiffHtml(formatDate(modifiedEvent[0][4]), formatDate(modifiedEvent[0][5])) + "<br/><br/>"))
+        + (modifiedEvent[0][6] != modifiedEvent[0][7] ? ("Location: " + generateDiffHtml(modifiedEvent[0][6], modifiedEvent[0][7]) + "<br/><br/>"))
+        + (modifiedEvent[0][8] != modifiedEvent[0][9] ? ("Description: " + generateDiffHtml(modifiedEvent[0][8], modifiedEvent[0][9]) + "<br/>"))
         + "</li>";
     }
     body += "</ul>";
