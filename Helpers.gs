@@ -1020,7 +1020,7 @@ function sendSummary() {
   modifiedEvents = condenseCalendarMap(modifiedEvents);
   removedEvents = condenseCalendarMap(removedEvents);
 
-  body = "GAS-ICS-Sync made the following changes to your calendar:<br/>";
+  body = "The following event changes were made ";
   for (var tgtCal of addedEvents){
     body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} added events<br/><ul>`;
     for (var addedEvent of tgtCal[1]){
@@ -1068,12 +1068,12 @@ function sendSummary() {
     body += "</ul>";
   }
 
-  body += "<br/><br/>Do you have any problems or suggestions? Contact us at <a href='https://github.com/derekantrican/GAS-ICS-Sync/'>github</a>.";
+  body += "<br/><br/>Do you have any problems or suggestions? Contact us at <a href='mailto:info@napervillebikeclub.com'>info@napervillebikeclub.com</a>.";
   var message = {
     to: email,
     subject: subject,
     htmlBody: body,
-    name: "GAS-ICS-Sync"
+    name: "Naperville Bicycle Club"
   };
 
   MailApp.sendEmail(message);
