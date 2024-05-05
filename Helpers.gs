@@ -307,7 +307,7 @@ function processEvent(event, calendarTz){
     if (needsUpdate){
       if (modifyExistingEvents){
         oldEvent = calendarEvents[index]
-        Logger.log("Updating existing event " + newEvent.extendedProperties.private["id"]);
+        Logger.log("Updating existing event " + newEvent.extendedProperties.private["id"] + " : " + newEvent.summary?newEvent.summary:"");
         newEvent = callWithBackoff(function(){
           return Calendar.Events.update(newEvent, targetCalendarId, calendarEvents[index].id);
         }, defaultMaxRetries);
@@ -318,7 +318,7 @@ function processEvent(event, calendarTz){
     }
     else{
       if (addEventsToCalendar){
-        Logger.log("Adding new event " + newEvent.extendedProperties.private["id"]);
+        Logger.log("Adding new event " + newEvent.extendedProperties.private["id"] + " : " + newEvent.summary?newEvent.summary:"");
         newEvent = callWithBackoff(function(){
           return Calendar.Events.insert(newEvent, targetCalendarId);
         }, defaultMaxRetries);
@@ -743,7 +743,7 @@ function processEventCleanup(){
         )
       )
       {
-        Logger.log("Deleting old event " + currentID);
+        Logger.log("Deleting old event " + currentID + " : " + calendarEvents[i].summary);
         callWithBackoff(function(){
           Calendar.Events.remove(targetCalendarId, calendarEvents[i].id);
         }, defaultMaxRetries);
@@ -1043,7 +1043,7 @@ function sendSummary() {
   modifiedEvents = condenseCalendarMap(modifiedEvents);
   removedEvents = condenseCalendarMap(removedEvents);
 
-  body = "The following event changes were made ";
+  body = "The following event changes were made.<br/>For changed text green highlights are added text, red are removed.";
   for (var tgtCal of addedEvents){
     body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} added events<br/><ul>`;
     for (var addedEvent of tgtCal[1]){
@@ -1062,11 +1062,11 @@ function sendSummary() {
     body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} modified events<br/><ul>`;
     for (var modifiedEvent of tgtCal[1]){
       body += "<li>"
-        + (modifiedEvent[0][0] != modifiedEvent[0][1] ? ("Name: " + generateDiffHtml(modifiedEvent[0][0], modifiedEvent[0][1]) + "<br/><br/>"))
-        + (modifiedEvent[0][2] != modifiedEvent[0][3] ? ("Start: " + generateDiffHtml(formatDate(modifiedEvent[0][2]), formatDate(modifiedEvent[0][3])) + "<br/><br/>"))
-        + (modifiedEvent[0][4] != modifiedEvent[0][5] ? ("End: " + generateDiffHtml(formatDate(modifiedEvent[0][4]), formatDate(modifiedEvent[0][5])) + "<br/><br/>"))
-        + (modifiedEvent[0][6] != modifiedEvent[0][7] ? ("Location: " + generateDiffHtml(modifiedEvent[0][6], modifiedEvent[0][7]) + "<br/><br/>"))
-        + (modifiedEvent[0][8] != modifiedEvent[0][9] ? ("Description: " + generateDiffHtml(modifiedEvent[0][8], modifiedEvent[0][9]) + "<br/>"))
+        + (modifiedEvent[0][0] != modifiedEvent[0][1] ? ("Name: " + generateDiffHtml(modifiedEvent[0][0], modifiedEvent[0][1]) + "<br/>"):"")
+        + (modifiedEvent[0][2] != modifiedEvent[0][3] ? ("Start: " + generateDiffHtml(formatDate(modifiedEvent[0][2]), formatDate(modifiedEvent[0][3])) + "<br/>"):"")
+        + (modifiedEvent[0][4] != modifiedEvent[0][5] ? ("End: " + generateDiffHtml(formatDate(modifiedEvent[0][4]), formatDate(modifiedEvent[0][5])) + "<br/>"):"")
+        + (modifiedEvent[0][6] != modifiedEvent[0][7] ? ("Location: " + generateDiffHtml(modifiedEvent[0][6], modifiedEvent[0][7]) + "<br/>"):"")
+        + (modifiedEvent[0][8] != modifiedEvent[0][9] ? ("Description: " + generateDiffHtml(modifiedEvent[0][8], modifiedEvent[0][9]) + "<br/>"):"")
         + "</li>";
     }
     body += "</ul>";
