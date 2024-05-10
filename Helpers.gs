@@ -1043,7 +1043,7 @@ function sendSummary() {
   modifiedEvents = condenseCalendarMap(modifiedEvents);
   removedEvents = condenseCalendarMap(removedEvents);
 
-  body = "The following events were added.";
+  body = addedEvents.length=0?"":"The following events were added.";
   for (var tgtCal of addedEvents){
     body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} added events<br/><ul>`;
     for (var addedEvent of tgtCal[1]){
@@ -1058,7 +1058,7 @@ function sendSummary() {
     body += "</ul>";
   }
 
-  body += "<br/><br/>The following events were changed<br/>For changed text green highlights are added text, red are removed.";
+  body += modifiedEvents>0?"<br/><br/>The following events were changed<br/>For changed text green highlights are added text, red are removed.";
   for (var tgtCal of modifiedEvents){
     body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} modified events<br/><ul>`;
     for (var modifiedEvent of tgtCal[1]){
@@ -1074,16 +1074,13 @@ function sendSummary() {
   }
 
 
-  body += "<br/><br/>The following events were removed.";
+  body += removedEvents.length>0?"<br/><br/>The following events were removed.";
   for (var tgtCal of removedEvents){
     body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} removed events<br/><ul>`;
     for (var removedEvent of tgtCal[1]){
       body += "<li>"
         + "<del>Name: " + removedEvent[0][0] + "</del><br/>"
         + "<del>Start: " + formatDate(removedEvent[0][1]) + "</del><br/>"
-        + "<del>End: " + formatDate(removedEvent[0][2]) + "</del><br/>"
-        + (removedEvent[0][3] ? ("<del>Location: " + removedEvent[0][3] + "</del><br/>") : "")
-        + (removedEvent[0][4] ? ("<del>Description: " + removedEvent[0][4] + "</del><br/>") : "")
         + "</li>";
     }
     body += "</ul>";
