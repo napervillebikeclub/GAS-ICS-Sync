@@ -46,6 +46,7 @@ var overrideVisibility = "";           // Changes the visibility of the event ("
 var addTasks = false;
 
 var emailSummary = true;              // Will email you when an event is added/modified/removed to your calendar
+var debugSummary = false;              // Always email the summary, primarily for diagnostics purposes.
 var email = "napervillebikeclub+webmaster@gmail.com";                        // OPTIONAL: If "emailSummary" is set to true or you want to receive update notifications, you will need to provide your email address
 var customEmailSubject = "[NBC] Strava event update information";              // OPTIONAL: If you want to change the email subject, provide a custom one here. Default: "GAS-ICS-Sync Execution Summary"
 var dateFormat = "YYYY-MM-DD"             // date format in the email summary (e.g. "YYYY-MM-DD", "DD.MM.YYYY", "MM/DD/YYYY". separators are ".", "-" and "/")
@@ -250,7 +251,7 @@ function startSync(){
     }
   }
 
-  if ((addedEvents.length + modifiedEvents.length + removedEvents.length) > 0 && emailSummary){
+  if (((addedEvents.length + modifiedEvents.length + removedEvents.length) > 0 && emailSummary) || debugSummary) {
     sendSummary();
   }
   Logger.log("Sync finished!");
