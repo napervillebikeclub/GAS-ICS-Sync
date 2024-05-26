@@ -215,6 +215,14 @@ function startSync(){
       //------------------------ Parse ical events --------------------------
       vevents = parseResponses(responses, icsEventsIds);
       Logger.log("Parsed " + vevents.length + " events from ical sources");
+      // Temporary possibly debug:  We really should never have zero events from ical sources in the NBC case.
+      // Sometimes it appears Strautomator returns zero events but none of the checks for empty ICS files or
+      // HTTP errors seems to kick off.   So for now, just abandon the run if there are zero events
+      // This will NOT work as intended if there is more than one URL for the target calendar
+      // and only one URL returns no events
+      if (vevents.length==0){
+        throw new Error("Protection fired, will not run script with zero events");
+      }
     }
 
     //------------------------ Process ical events ------------------------
