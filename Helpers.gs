@@ -140,6 +140,7 @@ function fetchSourceCalendars(sourceCalendarURLs){
         const icsRegex = RegExp("(BEGIN:VCALENDAR.*?END:VCALENDAR)", "s")
         var urlContent = icsRegex.exec(icsContent);
         if (urlContent == null){
+          Logger.log("[WARNING]Incorrectly formatted ics/ical or empty ICS at: " + url)
           // Microsoft Outlook has a bug that sometimes results in incorrectly formatted ics files. This tries to fix that problem.
           // Add END:VEVENT for every BEGIN:VEVENT that's missing it
           const veventRegex = /BEGIN:VEVENT(?:(?!END:VEVENT).)*?(?=.BEGIN|.END:VCALENDAR|$)/sg;
@@ -154,7 +155,6 @@ function fetchSourceCalendars(sourceCalendarURLs){
             Logger.log("[ERROR] Incorrect ics/ical URL: " + url)
             return
           }
-          Logger.log("[WARNING] Microsoft is incorrectly formatting ics/ical at: " + url)
         }
         result.push([urlContent[0], colorId]);
         return; 
@@ -350,7 +350,7 @@ function createEvent(event, calendarTz){
 
   var digest = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, icalEvent.toString(), Utilities.Charset.UTF_8).toString();
   if(calendarEventsMD5s.indexOf(digest) >= 0){
-    Logger.log("Skipping unchanged Event " + event.getFirstPropertyValue('uid').toString());
+    Logger.log("Skipping unchanged Event " + event.getFirstPropertyValue('uid').toString()+" "+event.getFirstPropertyValue('summary'));
     return;
   }
 
@@ -657,14 +657,14 @@ function checkSkipEvent(event, icalEvent){
 
     if(skip){//Completely remove the event as all instances of it are in the past
       icsEventsIds.splice(icsEventsIds.indexOf(event.getFirstPropertyValue('uid').toString()),1);
-      Logger.log("Skipping past recurring event " + event.getFirstPropertyValue('uid').toString());
+      Logger.log("Skipping past recurring event " + event.getFirstPropertyValue('uid').toString()+" "+event.getFirstPropertyValue('summary'));
       return true;
     }
   }
   else{//normal events
     if (icalEvent.endDate.compare(startUpdateTime) < 0){
       icsEventsIds.splice(icsEventsIds.indexOf(event.getFirstPropertyValue('uid').toString()),1);
-      Logger.log("Skipping previous event " + event.getFirstPropertyValue('uid').toString());
+      Logger.log("Skipping previous event " + event.getFirstPropertyValue('uid').toString()+" "+event.getFirstPropertyValue('summary'));
       return true;
     }
   }
@@ -829,7 +829,7 @@ function validateTimeZone(tzid, calendarTz){
     else{//floating time
       IanaTZ = calendarTz;
     }
-    Logger.log("Converting ICS timezone " + tzid + " to Google Calendar (IANA) timezone " + IanaTZ);
+    // Logger.log("Converting ICS timezone " + tzid + " to Google Calendar (IANA) timezone " + IanaTZ);
   }
   return IanaTZ || tzid;
 }
@@ -1121,12 +1121,12 @@ function callWithBackoff(func, maxRetries) {
     catch(err){
       err = err.message  || err;
       if ( err.includes("HTTP error") ) {
-        Logger.log(err);
+        Logger.log("HTTP error: "+err);
         return null;
       } else if ( err.includes("is not a function")  || !backoffRecoverableErrors.some(function(e){
               return err.toLowerCase().includes(e);
             }) ) {
-        Logger.log(err);
+        Logger.log("is not a function: "+err);
         throw err;
       } else if ( tries > maxRetries) {
         Logger.log(`Error, giving up after trying ${maxRetries} times [${err}]`);
