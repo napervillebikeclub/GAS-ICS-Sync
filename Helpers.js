@@ -307,7 +307,7 @@ function processEvent(event, calendarTz){
     if (needsUpdate){
       if (modifyExistingEvents){
         oldEvent = calendarEvents[index]
-        Logger.log("Updating existing event " + newEvent.extendedProperties.private["id"] + " : " + newEvent.summary?newEvent.summary:"");
+        Logger.log("Updating existing event " + newEvent.extendedProperties.private["id"] + " : " + newEvent.summary);
         newEvent = callWithBackoff(function(){
           return Calendar.Events.update(newEvent, targetCalendarId, calendarEvents[index].id);
         }, defaultMaxRetries);
@@ -318,7 +318,7 @@ function processEvent(event, calendarTz){
     }
     else{
       if (addEventsToCalendar){
-        Logger.log("Adding new event " + newEvent.extendedProperties.private["id"] + " : " + newEvent.summary?newEvent.summary:"");
+        Logger.log("Adding new event " + newEvent.extendedProperties.private["id"] + " : " + newEvent.summary);
         newEvent = callWithBackoff(function(){
           return Calendar.Events.insert(newEvent, targetCalendarId);
         }, defaultMaxRetries);
@@ -437,7 +437,7 @@ function createEvent(event, calendarTz){
       newEvent.organizer.email = organizerMail.toString();
 
     if (addOrganizerToTitle && organizerName){  
-        newEvent.summary = organizerName + ": " + newEvent.summary;
+        newEvent.summary = newEvent.summary + " Organizer: "+ organizerName;
     }
   }
 
