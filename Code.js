@@ -112,6 +112,11 @@ var removedEvents = [];
 function clearState(){
   PropertiesService.getUserProperties().setProperty('LastRun', 0);
 }
+// For debugging
+function clearStartSync(){
+  clearState();
+  startSync();
+}
 
 function startSync(){
   if (PropertiesService.getUserProperties().getProperty('LastRun') > 0 && (new Date().getTime() - PropertiesService.getUserProperties().getProperty('LastRun')) < 360000) {
@@ -145,6 +150,7 @@ function startSync(){
       var responses = fetchSourceCalendars(sourceCalendarURLs);
     }catch(e){
       PropertiesService.getUserProperties().setProperty('LastRun', 0);
+      clearState();
       throw new Error("Failure to fetch source calendar.  Aborting run");
     }
     Logger.log("Syncing " + responses.length + " calendars to " + targetCalendarName);
@@ -171,6 +177,7 @@ function startSync(){
           calendarEvents = [].concat(calendarEvents, eventList.items);
       }
       Logger.log("Fetched " + calendarEvents.length + " existing events from " + targetCalendarName);
+	Logger.log("DEBUG: " + calendarEvents);
       for (var i = 0; i < calendarEvents.length; i++){
         if (calendarEvents[i].extendedProperties != null){
           calendarEventsIds[i] = calendarEvents[i].extendedProperties.private["rec-id"] || calendarEvents[i].extendedProperties.private["id"];
@@ -187,6 +194,7 @@ function startSync(){
       // This will NOT work as intended if there is more than one URL for the target calendar
       // and only one URL returns no events
       if (vevents.length==0){
+        clearState();
         throw new Error("Protection fired, will not run script with zero events");
       }
     }
