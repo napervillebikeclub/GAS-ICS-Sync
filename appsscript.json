@@ -1,5 +1,5 @@
 {
-  "timeZone": "GMT",
+  "timeZone": "America/Chicago",
   "dependencies": {
     "enabledAdvancedServices": [{
       "userSymbol": "Tasks",
