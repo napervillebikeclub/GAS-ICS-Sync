@@ -350,7 +350,7 @@ function createEvent(event, calendarTz){
 
   var digest = Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, icalEvent.toString(), Utilities.Charset.UTF_8).toString();
   if(calendarEventsMD5s.indexOf(digest) >= 0){
-    Logger.log("Skipping unchanged Event " + event.getFirstPropertyValue('uid').toString()+" "+event.getFirstPropertyValue('summary'));
+    if ( verboseStatus ) Logger.log("Skipping unchanged Event " + event.getFirstPropertyValue('uid').toString()+" "+event.getFirstPropertyValue('summary'));
     return;
   }
 
@@ -560,7 +560,7 @@ function createEvent(event, calendarTz){
 function checkSkipEvent(event, icalEvent){
   if (icalEvent.isRecurrenceException()){
     if((icalEvent.startDate.compare(startUpdateTime) < 0) && (icalEvent.recurrenceId.compare(startUpdateTime) < 0)){
-      Logger.log("Skipping past recurrence exception");
+	if ( verboseStatus) Logger.log("Skipping past recurrence exception");
       return true;
     }
   }
@@ -657,14 +657,14 @@ function checkSkipEvent(event, icalEvent){
 
     if(skip){//Completely remove the event as all instances of it are in the past
       icsEventsIds.splice(icsEventsIds.indexOf(event.getFirstPropertyValue('uid').toString()),1);
-      Logger.log("Skipping past recurring event " + event.getFirstPropertyValue('uid').toString()+" "+event.getFirstPropertyValue('summary'));
+	if ( verboseStatus) Logger.log("Skipping past recurring event " + event.getFirstPropertyValue('uid').toString()+" "+event.getFirstPropertyValue('summary'));
       return true;
     }
   }
   else{//normal events
     if (icalEvent.endDate.compare(startUpdateTime) < 0){
       icsEventsIds.splice(icsEventsIds.indexOf(event.getFirstPropertyValue('uid').toString()),1);
-      Logger.log("Skipping previous event " + event.getFirstPropertyValue('uid').toString()+" "+event.getFirstPropertyValue('summary'));
+	if ( verboseStatus) Logger.log("Skipping previous event " + event.getFirstPropertyValue('uid').toString()+" "+event.getFirstPropertyValue('summary'));
       return true;
     }
   }
@@ -793,7 +793,7 @@ function processTasks(responses){
 
     Tasks.Tasks.insert(newtask, taskList.id);
   }
-  Logger.log("\tDone processing tasks");
+    if (verboseStatus) Logger.log("\tDone processing tasks");
 
   //-------------- Remove old Tasks -----------
   // ID can't be used as identifier as the API reassignes a random id at task creation
@@ -809,7 +809,7 @@ function processTasks(responses){
       }
     }
 
-    Logger.log("Done removing tasks");
+      if (verboseStatus) Logger.log("Done removing tasks");
   }
   //----------------------------------------------------------------
 }

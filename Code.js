@@ -177,7 +177,7 @@ function startSync(){
           calendarEvents = [].concat(calendarEvents, eventList.items);
       }
       Logger.log("Fetched " + calendarEvents.length + " existing events from " + targetCalendarName);
-	Logger.log("DEBUG: " + calendarEvents);
+	// Logger.log("DEBUG: " + calendarEvents);
       for (var i = 0; i < calendarEvents.length; i++){
         if (calendarEvents[i].extendedProperties != null){
           calendarEventsIds[i] = calendarEvents[i].extendedProperties.private["rec-id"] || calendarEvents[i].extendedProperties.private["id"];
@@ -211,14 +211,14 @@ function startSync(){
         processEvent(e, calendarTz);
       });
 
-      Logger.log("Done processing events");
+	if (verboseStatus) Logger.log("Done processing events");
     }
 
     //------------------------ Remove old events from calendar ------------------------
     if(removeEventsFromCalendar){
       Logger.log("Checking " + calendarEvents.length + " events for removal");
       processEventCleanup();
-      Logger.log("Done checking events for removal");
+	if (verboseStatus) Logger.log("Done checking events for removal");
     }
 
     //------------------------ Process Tasks ------------------------
