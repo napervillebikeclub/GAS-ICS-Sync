@@ -1063,6 +1063,7 @@ function sendSummary() {
     body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} modified events<br/><ul>`;
     for (var modifiedEvent of tgtCal[1]){
       body += "<li>"
+	+ "Current Title: " + modifiedEvent[0][1] + "<br/>"
         + (modifiedEvent[0][0] != modifiedEvent[0][1] ? ("Name: " + generateDiffHtml(modifiedEvent[0][0], modifiedEvent[0][1]) + "<br/>"):"")
         + (modifiedEvent[0][2] != modifiedEvent[0][3] ? ("Start: " + generateDiffHtml(formatDate(modifiedEvent[0][2]), formatDate(modifiedEvent[0][3])) + "<br/>"):"")
         + (modifiedEvent[0][4] != modifiedEvent[0][5] ? ("End: " + generateDiffHtml(formatDate(modifiedEvent[0][4]), formatDate(modifiedEvent[0][5])) + "<br/>"):"")
