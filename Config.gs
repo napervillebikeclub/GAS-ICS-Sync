@@ -7,8 +7,9 @@ var sourceCalendars = [                // The ics/ical urls that you want to get
                                        // For instance: ["https://p24-calendars.icloud.com/holidays/us_en.ics", "US Holidays"]
                                        // Or with colors following mapping https://developers.google.com/apps-script/reference/calendar/event-color, 
                                        // for instance: ["https://p24-calendars.icloud.com/holidays/us_en.ics", "US Holidays", "11"]
-  ["https://strautomator.com/api/calendar/109863990/806208a5637e327bfdfc0757/clubs.ics?countries=1&link=1", "From Strava"]
-  
+   ["https://strautomator.com/api/calendar/109863990/806208a5637e327bfdfc0757/clubs.ics?countries=1&link=1", "From Strava"]
+    ,
+   ["https://ridewithgps.com/organizations/430-naperville-bicycle-club/calendar.ics", "From RWGPS"]
 ];
 
 var howFrequent = 5;                     // What interval (minutes) to run this script on to check for new events.  Any integer can be used, but will be rounded up to 5, 10, 15, 30 or to the nearest hour after that.. 60, 120, etc. 1440 (24 hours) is the maximum value.  Anything above that will be replaced with 1440.
