@@ -11,7 +11,8 @@
 *      New Interface: Make sure your toolbar says "install" to the right of "Debug", then click "Run"
 *      Old Interface: Click "Run" > "Run function" > "install"
 * 4) Authorize: You will be prompted to authorize the program and will need to click "Advanced" > "Go to GAS-ICS-Sync (unsafe)"
-*    (For steps to follow in authorization, see this video: https://youtu.be/_5k10maGtek?t=1m22s )
+*      - For steps to follow in authorization, see this video: https://youtu.be/_5k10maGtek?t=1m22s
+*      - To learn more about the permissions requested by the script visit https://github.com/derekantrican/GAS-ICS-Sync/wiki/Understanding-Permissions-in-GAS%E2%80%90ICS%E2%80%90Sync
 * 5) You can also run "startSync" if you want to sync only once (New Interface: change the dropdown to the right of "Debug" from "install" to "startSync")
 *
 * **To stop the Script from running click in the menu "Run" > "Run function" > "uninstall" (New Interface: change the dropdown to the right of "Debug" from "install" to "uninstall")
@@ -32,7 +33,6 @@ var sourceCalendars = [                // The ics/ical urls that you want to get
 ];
 
 var howFrequent = 15;                     // What interval (minutes) to run this script on to check for new events.  Any integer can be used, but will be rounded up to 5, 10, 15, 30 or to the nearest hour after that.. 60, 120, etc. 1440 (24 hours) is the maximum value.  Anything above that will be replaced with 1440.
-var onlyFutureEvents = false;             // If you turn this to "true", past events will not be synced (this will also removed past events from the target calendar if removeEventsFromCalendar is true)
 var addEventsToCalendar = true;           // If you turn this to "false", you can check the log (View > Logs) to make sure your events are being read correctly before turning this on
 var modifyExistingEvents = true;          // If you turn this to "false", any event in the feed that was modified after being added to the calendar will not update
 var removeEventsFromCalendar = true;      // If you turn this to "true", any event created by the script that is not found in the feed will be removed.
@@ -129,8 +129,6 @@ function uninstall(){
   deleteAllTriggers();
 }
 
-var startUpdateTime;
-
 // Per-calendar global variables (must be reset before processing each new calendar!)
 var calendarEvents = [];
 var calendarEventsIds = [];
@@ -149,6 +147,9 @@ var addedEvents = [];
 var modifiedEvents = [];
 var removedEvents = [];
 
+// Syncing logic can set this to true to cause the Google Apps Script "Executions" dashboard to report failure
+var reportOverallFailure = false;
+
 function startSync(){
   if (PropertiesService.getUserProperties().getProperty('LastRun') > 0 && (new Date().getTime() - PropertiesService.getUserProperties().getProperty('LastRun')) < 360000) {
     Logger.log("Another iteration is currently running! Exiting...");
@@ -156,9 +157,6 @@ function startSync(){
   }
 
   PropertiesService.getUserProperties().setProperty('LastRun', new Date().getTime());
-
-  if (onlyFutureEvents)
-    startUpdateTime = new ICAL.Time.fromJSDate(new Date());
 
   //Disable email notification if no mail adress is provided
   emailSummary = emailSummary && email != "";
@@ -258,4 +256,10 @@ function startSync(){
   }
   Logger.log("Sync finished!");
   PropertiesService.getUserProperties().setProperty('LastRun', 0);
+
+  if (reportOverallFailure) {
+    // Cause the Google Apps Script "Executions" dashboard to show a failure
+    // (the message text does not seem to be logged anywhere)
+    throw new Error('The sync operation produced errors. See log for details.');
+  }
 }
