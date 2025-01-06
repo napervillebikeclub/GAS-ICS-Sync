@@ -242,7 +242,7 @@ function parseResponses(responses){
     });
   }
 
-  //No need to process calcelled events as they will be added to gcal's trash anyway
+  //No need to process cancelled events as they will be added to gcal's trash anyway
   result = result.filter(function(event){
     try{
       return (event.getFirstPropertyValue('status').toString().toLowerCase() != "cancelled");
