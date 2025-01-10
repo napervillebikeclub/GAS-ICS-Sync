@@ -1358,7 +1358,7 @@ function sendSummary() {
 
   body = (addedEvents.length>0 || debugSummary) ? "The following events were added." : "";
   for (var tgtCal of addedEvents){
-    body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} added events<br/><ul>`;
+    body += `<br/><B>${tgtCal[0]}</B>: ${tgtCal[1].length} added events<br/><ul>`;
     for (var addedEvent of tgtCal[1]){
       body += "<li>"
         + "Name: " + addedEvent[0][0] + "<br/>"
@@ -1371,9 +1371,9 @@ function sendSummary() {
     body += "</ul>";
   }
 
-  body += (modifiedEvents>0 || debugSummary) ? "<br/><br/>The following events were changed. Green highlights are added text, red are removed." : "";
+  body += (modifiedEvents.length>0 || debugSummary) ? "<br/><br/>The following events were changed. Green highlights are added text, red are removed." : "";
   for (var tgtCal of modifiedEvents){
-    body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} modified events<br/><ul>`;
+    body += `<br/><B>${tgtCal[0]}</B>: ${tgtCal[1].length} modified events<br/><ul>`;
     for (var modifiedEvent of tgtCal[1]){
       body += "<li>"
 	+ "Current Title: " + modifiedEvent[0][1] + "<br/>"
@@ -1390,7 +1390,7 @@ function sendSummary() {
 
   body += (removedEvents.length>0 || debugSummary) ? "<br/><br/>The following events were removed." : "";
   for (var tgtCal of removedEvents){
-    body += `<br/>${tgtCal[0]}: ${tgtCal[1].length} removed events<br/><ul>`;
+    body += `<br/><B>${tgtCal[0]}</B>: ${tgtCal[1].length} removed events<br/><ul>`;
     for (var removedEvent of tgtCal[1]){
       body += "<li>"
         + "<del>Name: " + removedEvent[0][0] + "</del><br/>"

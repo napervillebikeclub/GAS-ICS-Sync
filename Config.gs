@@ -7,9 +7,9 @@ var sourceCalendars = [                // The ics/ical urls that you want to get
                                        // For instance: ["https://p24-calendars.icloud.com/holidays/us_en.ics", "US Holidays"]
                                        // Or with colors following mapping https://developers.google.com/apps-script/reference/calendar/event-color, 
                                        // for instance: ["https://p24-calendars.icloud.com/holidays/us_en.ics", "US Holidays", "11"]
-   ["https://strautomator.com/api/calendar/109863990/806208a5637e327bfdfc0757/clubs.ics?countries=1&link=1", "From Strava"]
+   ["https://strautomator.com/api/calendar/109863990/806208a5637e327bfdfc0757/clubs.ics?countries=1&link=1", "Strava"]
     ,
-   ["https://ridewithgps.com/organizations/430-naperville-bicycle-club/calendar.ics", "From RWGPS"]
+   ["https://ridewithgps.com/organizations/430-naperville-bicycle-club/calendar.ics", "RWGPS"]
 ];
 
 var howFrequent = 5;                     // What interval (minutes) to run this script on to check for new events.  Any integer can be used, but will be rounded up to 5, 10, 15, 30 or to the nearest hour after that.. 60, 120, etc. 1440 (24 hours) is the maximum value.  Anything above that will be replaced with 1440.
@@ -33,5 +33,5 @@ var debugSummary = false;              // Always email the summary, primarily fo
 var verboseStatus = false;		// Turn on certain messages that are not normally needed in the logs
 var email = "nbclub@googlegroups.com";                        // OPTIONAL: If "emailSummary" is set to true or you want to receive update notifications, you will need to provide your email address
 // var email = "napervillebikeclub+webmaster@gmail.com";                        // DEBUG email
-var customEmailSubject = "[NBC] Strava event update information";              // OPTIONAL: If you want to change the email subject, provide a custom one here. Default: "GAS-ICS-Sync Execution Summary"
+var customEmailSubject = "[NBC] Event update information";              // OPTIONAL: If you want to change the email subject, provide a custom one here. Default: "GAS-ICS-Sync Execution Summary"
 var dateFormat = "YYYY-MM-DD"             // date format in the email summary (e.g. "YYYY-MM-DD", "DD.MM.YYYY", "MM/DD/YYYY". separators are ".", "-" and "/")
